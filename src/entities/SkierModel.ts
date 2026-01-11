@@ -195,11 +195,9 @@ export class SkierModel {
     this.rightHip.rotation.x = baseHipAngle + state.rightKneeBend * 0.3;
     this.rightKnee.rotation.x = state.rightKneeBend * maxKneeBend;
 
-    // Ski angles for snowplough - negate to compensate for 180° character rotation
-    // Character faces away from camera (rotated by PI), which flips the local X axis
-    // Negating the angles ensures tips point toward center in world space
-    this.leftAnkle.rotation.y = -state.leftSkiAngle;
-    this.rightAnkle.rotation.y = -state.rightSkiAngle;
+    // Ski angles for snowplough - apply directly and let visuals show the result
+    this.leftAnkle.rotation.y = state.leftSkiAngle;
+    this.rightAnkle.rotation.y = state.rightSkiAngle;
 
     // Torso lean based on turn
     this.torso.rotation.z = -state.direction * 0.3;
