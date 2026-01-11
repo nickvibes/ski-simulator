@@ -180,8 +180,7 @@ export class SkierModel {
     // Update body position
     this.group.position.set(state.position.x, state.position.y, state.position.z);
 
-    // Rotate body to face direction of travel
-    // Model default faces +Z, we need to face -Z (downhill) plus any turn direction
+    // Rotate body to face direction of travel (downhill, away from camera)
     this.group.rotation.y = state.direction + Math.PI;
 
     // Animate knee bend
@@ -197,9 +196,8 @@ export class SkierModel {
     this.rightKnee.rotation.x = state.rightKneeBend * maxKneeBend;
 
     // Ski angles for snowplough
-    // Negate to account for model's π rotation - creates proper V wedge
-    this.leftAnkle.rotation.y = -state.leftSkiAngle;
-    this.rightAnkle.rotation.y = -state.rightSkiAngle;
+    this.leftAnkle.rotation.y = state.leftSkiAngle;
+    this.rightAnkle.rotation.y = state.rightSkiAngle;
 
     // Torso lean based on turn
     this.torso.rotation.z = -state.direction * 0.3;

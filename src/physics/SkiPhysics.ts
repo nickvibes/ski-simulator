@@ -51,19 +51,19 @@ export class SkiPhysics {
 
     // Calculate individual ski angles for visuals
     // In snowplough, ski TIPS come together, TAILS spread apart (pizza/wedge shape)
-    // Looking from behind: left ski tip angles RIGHT, right ski tip angles LEFT
     const halfWedge = (state.wedgeAngle * Math.PI) / 180 / 2;
     const turnOffset = input.turnDirection * 0.05;
 
-    // INVERTED from before - negative for left ski, positive for right ski
-    // This creates the proper V shape (tips together)
-    let leftAngle = -halfWedge - turnOffset;
-    let rightAngle = halfWedge - turnOffset;
+    // Ski tip is in -Z direction in model space
+    // Left ski: positive rotation moves tip right (toward center)
+    // Right ski: negative rotation moves tip left (toward center)
+    let leftAngle = halfWedge + turnOffset;
+    let rightAngle = -halfWedge + turnOffset;
 
-    // Clamp to prevent skis from going past parallel (maintain wedge)
-    const minAngle = (3 * Math.PI) / 180; // 3 degree minimum
-    if (leftAngle > -minAngle) leftAngle = -minAngle;
-    if (rightAngle < minAngle) rightAngle = minAngle;
+    // Clamp to maintain minimum wedge angle
+    const minAngle = (3 * Math.PI) / 180;
+    if (leftAngle < minAngle) leftAngle = minAngle;
+    if (rightAngle > -minAngle) rightAngle = -minAngle;
 
     state.leftSkiAngle = leftAngle;
     state.rightSkiAngle = rightAngle;
