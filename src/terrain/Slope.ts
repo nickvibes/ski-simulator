@@ -224,20 +224,18 @@ export class Slope {
   }
 
   update(skierZ: number): void {
-    // Move entire terrain group to follow skier
-    // This keeps the terrain under the skier at all times
-    this.group.position.z = skierZ;
+    // Move only terrain mesh to follow skier (skybox stays fixed)
+    this.terrain.position.z = skierZ;
 
     // Update positions of trees and markers for infinite effect
     this.trees.children.forEach((tree) => {
-      // Tree position is relative to group, so check against 0 (group origin)
-      if (tree.position.z > 20) {
+      if (tree.position.z - skierZ > 20) {
         tree.position.z -= TERRAIN.length;
       }
     });
 
     this.markers.children.forEach((marker) => {
-      if (marker.position.z > 20) {
+      if (marker.position.z - skierZ > 20) {
         marker.position.z -= 30; // Reset markers
       }
     });
