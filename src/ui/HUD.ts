@@ -280,9 +280,9 @@ export class HUD {
     (document.getElementById('r-toe-bar') as HTMLDivElement).style.width = `${inputState.rightToe * 100}%`;
 
     // Update wedge visualizer (convert radians to degrees)
-    // For proper wedge display: left ski tilts right, right ski tilts left
-    const leftAngle = (skierState.leftSkiAngle * 180) / Math.PI;
-    const rightAngle = (skierState.rightSkiAngle * 180) / Math.PI;
+    // Negate to match the 3D model view (from behind the skier)
+    const leftAngle = -(skierState.leftSkiAngle * 180) / Math.PI;
+    const rightAngle = -(skierState.rightSkiAngle * 180) / Math.PI;
 
     this.leftSkiElement.style.transform = `rotate(${leftAngle}deg)`;
     this.rightSkiElement.style.transform = `rotate(${rightAngle}deg)`;
