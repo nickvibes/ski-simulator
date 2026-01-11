@@ -54,16 +54,16 @@ export class SkiPhysics {
     const halfWedge = (state.wedgeAngle * Math.PI) / 180 / 2;
     const turnOffset = input.turnDirection * 0.05;
 
-    // Ski tip is in -Z direction in model space
-    // Left ski: positive rotation moves tip right (toward center)
-    // Right ski: negative rotation moves tip left (toward center)
-    let leftAngle = halfWedge + turnOffset;
-    let rightAngle = -halfWedge + turnOffset;
+    // Ski tip is in +Z direction (front of skier)
+    // Left ski: NEGATIVE rotation moves tip RIGHT (toward center)
+    // Right ski: POSITIVE rotation moves tip LEFT (toward center)
+    let leftAngle = -halfWedge + turnOffset;
+    let rightAngle = halfWedge + turnOffset;
 
-    // Clamp to maintain minimum wedge angle
+    // Clamp to maintain wedge (left stays negative, right stays positive)
     const minAngle = (3 * Math.PI) / 180;
-    if (leftAngle < minAngle) leftAngle = minAngle;
-    if (rightAngle > -minAngle) rightAngle = -minAngle;
+    if (leftAngle > -minAngle) leftAngle = -minAngle;
+    if (rightAngle < minAngle) rightAngle = minAngle;
 
     state.leftSkiAngle = leftAngle;
     state.rightSkiAngle = rightAngle;
