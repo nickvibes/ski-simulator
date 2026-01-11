@@ -195,11 +195,11 @@ export class SkierModel {
     this.rightHip.rotation.x = baseHipAngle + state.rightKneeBend * 0.3;
     this.rightKnee.rotation.x = state.rightKneeBend * maxKneeBend;
 
-    // Ski angles for snowplough - apply directly
-    // Physics calculates: left = negative (tip right), right = positive (tip left)
-    // This creates V shape (tips together) when viewed from behind
-    this.leftAnkle.rotation.y = state.leftSkiAngle;
-    this.rightAnkle.rotation.y = state.rightSkiAngle;
+    // Ski angles for snowplough - swap left/right angles
+    // CSS rotation (HUD) is clockwise positive, Three.js Y rotation is counter-clockwise positive
+    // Swapping the angles compensates for this difference
+    this.leftAnkle.rotation.y = state.rightSkiAngle;
+    this.rightAnkle.rotation.y = state.leftSkiAngle;
 
     // Torso lean based on turn
     this.torso.rotation.z = -state.direction * 0.3;

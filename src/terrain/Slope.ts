@@ -47,7 +47,8 @@ export class Slope {
 
     this.terrain = new THREE.Mesh(this.terrainGeometry, snowMaterial);
     this.terrain.receiveShadow = true;
-    this.terrain.position.z = -TERRAIN.length / 2;
+    // Center terrain at group origin so it follows the skier properly
+    this.terrain.position.z = 0;
     this.group.add(this.terrain);
 
     // Add subtle grid lines for speed reference
