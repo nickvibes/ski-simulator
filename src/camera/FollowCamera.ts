@@ -30,21 +30,22 @@ export class FollowCamera {
   update(skierState: SkierState): void {
     // Calculate target camera position based on skier
     const skierPos = skierState.position;
-    const direction = skierState.direction;
+    // Model faces direction + π, so camera should be behind that facing direction
+    const facingAngle = skierState.direction + Math.PI;
 
-    // Position camera behind and above skier
-    // Account for skier's facing direction
+    // Position camera BEHIND the skier (opposite to facing direction)
+    // Behind = facing angle + π = direction + 2π = direction
     this.targetPosition.set(
-      skierPos.x + Math.sin(direction) * CAMERA.offsetBack,
+      skierPos.x + Math.sin(skierState.direction) * CAMERA.offsetBack,
       skierPos.y + CAMERA.offsetUp,
-      skierPos.z + Math.cos(direction) * CAMERA.offsetBack
+      skierPos.z + Math.cos(skierState.direction) * CAMERA.offsetBack
     );
 
-    // Look ahead of the skier (slightly below to show descent)
+    // Look at where the skier is going (in facing direction)
     this.targetLookAt.set(
-      skierPos.x - Math.sin(direction) * CAMERA.lookAheadDistance,
-      skierPos.y - 0.3, // Look slightly down to show slope
-      skierPos.z - Math.cos(direction) * CAMERA.lookAheadDistance
+      skierPos.x + Math.sin(facingAngle) * CAMERA.lookAheadDistance,
+      skierPos.y - 0.5, // Look down to show slope
+      skierPos.z + Math.cos(facingAngle) * CAMERA.lookAheadDistance
     );
 
     // Smooth interpolation (lerp) for natural follow

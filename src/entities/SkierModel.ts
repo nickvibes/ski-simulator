@@ -180,7 +180,8 @@ export class SkierModel {
     // Update body position
     this.group.position.set(state.position.x, state.position.y, state.position.z);
 
-    // Rotate body based on direction (add π to face downhill, -Z direction)
+    // Rotate body to face direction of travel
+    // Model default faces +Z, we need to face -Z (downhill) plus any turn direction
     this.group.rotation.y = state.direction + Math.PI;
 
     // Animate knee bend

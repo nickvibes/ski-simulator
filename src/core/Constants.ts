@@ -1,10 +1,10 @@
 // Physics constants for skiing simulation
 export const PHYSICS = {
   gravity: 9.81,
-  slopeAngle: 15, // Green slope: ~15 degrees
+  slopeAngle: 25, // Steeper slope for better visibility (25 degrees)
   maxSpeed: 8, // m/s (beginner safe)
-  baseFriction: 0.05,
-  wedgeFriction: 0.5, // Strong friction from snowplough - allows stopping
+  baseFriction: 0.08,
+  wedgeFriction: 0.6, // Strong friction from snowplough - allows stopping
   turnRate: 2.0, // Degrees per second per input
   dragCoefficient: 0.02,
   maxWedgeAngle: 45, // Maximum snowplough angle in degrees
@@ -16,9 +16,9 @@ export const CAMERA = {
   fov: 60,
   near: 0.1,
   far: 1000,
-  offsetBack: 1.5, // meters behind skier
-  offsetUp: 1.0, // meters above skier
-  lookAheadDistance: 2, // Look ahead of skier
+  offsetBack: 3.0, // meters behind skier (further back to see slope)
+  offsetUp: 2.0, // meters above skier (higher to see down the slope)
+  lookAheadDistance: 4, // Look further ahead to see slope
   smoothing: 0.1, // Lerp factor for smooth follow
 };
 
