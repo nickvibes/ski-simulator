@@ -54,16 +54,18 @@ export class SkiPhysics {
     const halfWedge = (state.wedgeAngle * Math.PI) / 180 / 2;
     const turnOffset = input.turnDirection * 0.05;
 
-    // CSS rotation: POSITIVE = clockwise, NEGATIVE = counter-clockwise
-    // For tips to come together: left ski rotates clockwise (tip goes right toward center)
-    // Right ski rotates counter-clockwise (tip goes left toward center)
-    let leftAngle = halfWedge + turnOffset;   // positive = tip goes right
-    let rightAngle = -halfWedge + turnOffset; // negative = tip goes left
+    // Snowplough wedge: ski tips point toward each other
+    // In Three.js Y rotation (counter-clockwise positive when looking down +Y):
+    // - Negative rotation = clockwise = tip moves toward +X (right)
+    // - Positive rotation = counter-clockwise = tip moves toward -X (left)
+    // So: left ski negative (tip goes right/center), right ski positive (tip goes left/center)
+    let leftAngle = -halfWedge + turnOffset;
+    let rightAngle = halfWedge + turnOffset;
 
-    // Clamp to maintain wedge (left stays positive, right stays negative)
+    // Clamp to maintain wedge (left stays negative, right stays positive)
     const minAngle = (3 * Math.PI) / 180;
-    if (leftAngle < minAngle) leftAngle = minAngle;
-    if (rightAngle > -minAngle) rightAngle = -minAngle;
+    if (leftAngle > -minAngle) leftAngle = -minAngle;
+    if (rightAngle < minAngle) rightAngle = minAngle;
 
     state.leftSkiAngle = leftAngle;
     state.rightSkiAngle = rightAngle;
