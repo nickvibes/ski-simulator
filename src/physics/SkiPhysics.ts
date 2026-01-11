@@ -50,19 +50,21 @@ export class SkiPhysics {
     state.wedgeAngle += (targetWedge - state.wedgeAngle) * 0.1;
 
     // Calculate individual ski angles for visuals
-    // In snowplough, skis form a V shape (tips together, tails apart)
+    // In snowplough, ski TIPS come together, TAILS spread apart (pizza shape)
     const halfWedge = (state.wedgeAngle * Math.PI) / 180 / 2;
-    const turnOffset = input.turnDirection * 0.15;
+    const turnOffset = input.turnDirection * 0.1;
 
-    // Left ski angle: negative (pointing inward from left)
-    // Right ski angle: positive (pointing inward from right)
-    let leftAngle = halfWedge + turnOffset;  // Positive = ski tips right
-    let rightAngle = -halfWedge + turnOffset; // Negative = ski tips left
+    // After the π rotation, skier faces -Z direction
+    // Left ski: rotate so tip points inward (to skier's right) = negative angle
+    // Right ski: rotate so tip points inward (to skier's left) = positive angle
+    let leftAngle = -halfWedge + turnOffset;
+    let rightAngle = halfWedge + turnOffset;
 
-    // Clamp to prevent skis from crossing (maintain minimum 5 degree separation)
-    const minSeparation = (5 * Math.PI) / 180;
-    if (leftAngle < minSeparation / 2) leftAngle = minSeparation / 2;
-    if (rightAngle > -minSeparation / 2) rightAngle = -minSeparation / 2;
+    // Clamp to prevent skis from crossing
+    // Left ski should stay negative or near zero, right ski should stay positive or near zero
+    const minAngle = (2 * Math.PI) / 180; // 2 degree minimum
+    if (leftAngle > -minAngle) leftAngle = -minAngle;
+    if (rightAngle < minAngle) rightAngle = minAngle;
 
     state.leftSkiAngle = leftAngle;
     state.rightSkiAngle = rightAngle;
@@ -111,8 +113,9 @@ export class SkiPhysics {
     state.position.z += state.velocity.z * deltaTime;
 
     // Update Y position based on slope - skier descends as they move down slope
-    // Y decreases as Z becomes more negative (going downhill)
-    const slopeHeight = -state.position.z * Math.tan(this.slopeAngleRad);
+    // Z becomes more negative going downhill, so Y should also decrease
+    // slopeHeight = z * tan(angle) -> when z is negative, height is negative (lower)
+    const slopeHeight = state.position.z * Math.tan(this.slopeAngleRad);
     state.position.y = 0.5 + slopeHeight; // 0.5 base height + slope descent
 
     // Keep skier on the slope (simple constraint)

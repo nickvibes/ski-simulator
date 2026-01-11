@@ -3,10 +3,10 @@ export const PHYSICS = {
   gravity: 9.81,
   slopeAngle: 15, // Green slope: ~15 degrees
   maxSpeed: 8, // m/s (beginner safe)
-  baseFriction: 0.02,
-  wedgeFriction: 0.15, // Additional friction from snowplough
+  baseFriction: 0.05,
+  wedgeFriction: 0.5, // Strong friction from snowplough - allows stopping
   turnRate: 2.0, // Degrees per second per input
-  dragCoefficient: 0.01,
+  dragCoefficient: 0.02,
   maxWedgeAngle: 45, // Maximum snowplough angle in degrees
   minWedgeAngle: 5, // Minimum wedge angle
 };
@@ -81,7 +81,7 @@ export const KEYBOARD = {
 // Colors
 export const COLORS = {
   sky: 0x87ceeb,
-  snow: 0xfffafa,
+  snow: 0xffffff, // Pure white snow
   skier: {
     jacket: 0xff4444,
     pants: 0x333366,
