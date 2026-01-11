@@ -195,9 +195,14 @@ export class SkierModel {
     this.rightHip.rotation.x = baseHipAngle + state.rightKneeBend * 0.3;
     this.rightKnee.rotation.x = state.rightKneeBend * maxKneeBend;
 
-    // Ski angles for snowplough - apply directly and let visuals show the result
-    this.leftAnkle.rotation.y = state.leftSkiAngle;
-    this.rightAnkle.rotation.y = state.rightSkiAngle;
+    // Ski angles for snowplough
+    // The ski visualization needs angles that create a V shape (tips together)
+    // when viewed from behind the character looking downhill
+    // leftSkiAngle is negative (tip rotates right toward center)
+    // rightSkiAngle is positive (tip rotates left toward center)
+    // Apply with opposite sign to match the visual expectation from behind
+    this.leftAnkle.rotation.y = -state.rightSkiAngle;
+    this.rightAnkle.rotation.y = -state.leftSkiAngle;
 
     // Torso lean based on turn
     this.torso.rotation.z = -state.direction * 0.3;
