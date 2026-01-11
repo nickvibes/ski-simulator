@@ -40,10 +40,10 @@ export class FollowCamera {
       skierPos.z + Math.cos(direction) * CAMERA.offsetBack
     );
 
-    // Look ahead of the skier
+    // Look ahead of the skier (slightly below to show descent)
     this.targetLookAt.set(
       skierPos.x - Math.sin(direction) * CAMERA.lookAheadDistance,
-      skierPos.y + 0.5,
+      skierPos.y - 0.3, // Look slightly down to show slope
       skierPos.z - Math.cos(direction) * CAMERA.lookAheadDistance
     );
 

@@ -50,10 +50,22 @@ export class SkiPhysics {
     state.wedgeAngle += (targetWedge - state.wedgeAngle) * 0.1;
 
     // Calculate individual ski angles for visuals
-    // In snowplough, skis form a V shape
+    // In snowplough, skis form a V shape (tips together, tails apart)
     const halfWedge = (state.wedgeAngle * Math.PI) / 180 / 2;
-    state.leftSkiAngle = -halfWedge + input.turnDirection * 0.1;
-    state.rightSkiAngle = halfWedge + input.turnDirection * 0.1;
+    const turnOffset = input.turnDirection * 0.15;
+
+    // Left ski angle: negative (pointing inward from left)
+    // Right ski angle: positive (pointing inward from right)
+    let leftAngle = halfWedge + turnOffset;  // Positive = ski tips right
+    let rightAngle = -halfWedge + turnOffset; // Negative = ski tips left
+
+    // Clamp to prevent skis from crossing (maintain minimum 5 degree separation)
+    const minSeparation = (5 * Math.PI) / 180;
+    if (leftAngle < minSeparation / 2) leftAngle = minSeparation / 2;
+    if (rightAngle > -minSeparation / 2) rightAngle = -minSeparation / 2;
+
+    state.leftSkiAngle = leftAngle;
+    state.rightSkiAngle = rightAngle;
 
     // Calculate friction based on wedge angle
     // Wider wedge = more friction = slower
@@ -97,6 +109,11 @@ export class SkiPhysics {
     // Update position
     state.position.x += state.velocity.x * deltaTime;
     state.position.z += state.velocity.z * deltaTime;
+
+    // Update Y position based on slope - skier descends as they move down slope
+    // Y decreases as Z becomes more negative (going downhill)
+    const slopeHeight = -state.position.z * Math.tan(this.slopeAngleRad);
+    state.position.y = 0.5 + slopeHeight; // 0.5 base height + slope descent
 
     // Keep skier on the slope (simple constraint)
     // Lateral bounds
